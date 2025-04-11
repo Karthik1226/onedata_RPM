@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'nu.studer.jooq' version '9.0'
+	id 'org.flywaydb.flyway' version '9.22.3'
 }
 
 group = 'com.onedata'
@@ -17,6 +19,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	flywayMigration
 }
 
 repositories {
@@ -34,8 +37,66 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	flywayMigration "org.postgresql:postgresql:42.7.1"
+	jooqGenerator "org.postgresql:postgresql:42.7.1"
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+flyway {
+	configurations = ['flywayMigration']
+	url = 'jdbc:postgresql://localhost:5433/patientrpm'
+	user = 'postgres'
+	password = 'Onedata@6161'
+	schemas = ['public']
+}
+jooq {
+	version = dependencyManagement.importedProperties['jooq.version']
+	edition = nu.studer.gradle.jooq.JooqEdition.OSS
+	configurations {
+		main {
+			generateSchemaSourceOnCompilation = false
+			generationTool {
+				logging = org.jooq.meta.jaxb.Logging.WARN
+				jdbc {
+					driver = 'org.postgresql.Driver'
+					url = flyway.url
+					user = flyway.user
+					password = flyway.password
+				}
+				generator {
+					name = 'org.jooq.codegen.DefaultGenerator'
+					database {
+						name = 'org.jooq.meta.postgres.PostgresDatabase'
+						inputSchema = 'public'
+						excludes = 'flyway_schema_history'
+					}
+					generate {
+						deprecated = false
+						records = true
+						pojos = true
+						fluentSetters = true
+					}
+					target {
+						packageName = "${group}.${project.name.replace(Map.of("-", "", "_", ""))}.models"
+						directory = "src/generated/jooq"
+					}
+					strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+				}
+			}
+		}
+	}
+}
+tasks.named('generateJooq').configure {
+	dependsOn tasks.named('flywayMigrate')
+
+	inputs.files(fileTree('src/main/resources/db/migration'))
+			.withPropertyName('migrations')
+			.withPathSensitivity(PathSensitivity.RELATIVE)
+	allInputsDeclared = true
+}
+/*
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs += ['-parameters']
+}*/

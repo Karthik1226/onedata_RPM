@@ -9,5 +9,4 @@ public class RemotepatientmonitoringApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RemotepatientmonitoringApplication.class, args);
 	}
-
 }
