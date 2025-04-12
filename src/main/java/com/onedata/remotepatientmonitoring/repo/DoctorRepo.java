@@ -3,12 +3,13 @@ package com.onedata.remotepatientmonitoring.repo;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Doctor;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.onedata.remotepatientmonitoring.models.Tables.DOCTOR;
 
-
+@Repository
 public class DoctorRepo {
     @Autowired
     private DSLContext dsl;
