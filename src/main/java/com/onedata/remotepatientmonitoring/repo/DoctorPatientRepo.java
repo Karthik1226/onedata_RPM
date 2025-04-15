@@ -17,8 +17,8 @@ public class DoctorPatientRepo {
     @Autowired
     private DSLContext dsl;
 
-    public void assignDoctorToPatient(Integer doctorId,Integer patientId){
-        dsl.insertInto(DOCTOR_PATIENT)
+    public int assignDoctorToPatient(Integer doctorId,Integer patientId){
+        return dsl.insertInto(DOCTOR_PATIENT)
                 .set(DOCTOR_PATIENT.DOCTOR_ID,doctorId)
                 .set(DOCTOR_PATIENT.PATIENT_ID,patientId)
                 .onConflictDoNothing()

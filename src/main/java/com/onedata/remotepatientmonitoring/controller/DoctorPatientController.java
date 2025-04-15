@@ -1,9 +1,10 @@
 package com.onedata.remotepatientmonitoring.controller;
 
+import com.onedata.remotepatientmonitoring.dto.doctorPatient.DoctorPatientRequestDTO;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Patient;
 import com.onedata.remotepatientmonitoring.service.DoctorPatientService;
-import org.jooq.impl.QOM;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,8 @@ public class DoctorPatientController {
     private DoctorPatientService doctorPatientService;
 
     @PostMapping("/assign/doctor")
-    public void assignDoctorToPatient(@RequestParam("doctorId") Integer doctorId, @RequestParam("patientId") Integer patientId){
-        doctorPatientService.assignDoctor(doctorId,patientId);
+    public void assignDoctorToPatient(@RequestBody @Valid DoctorPatientRequestDTO requestDTO){
+        doctorPatientService.assignDoctor(requestDTO.getDoctorId(),requestDTO.getPatientId());
     }
     @DeleteMapping("/remove/doctor")
     public void removeDoctorFromPatient(@RequestParam("doctorId") Integer doctorId,@RequestParam("patientId") Integer patientId){

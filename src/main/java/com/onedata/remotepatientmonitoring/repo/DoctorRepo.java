@@ -23,15 +23,15 @@ public class DoctorRepo {
                 .where(DOCTOR.ID.eq(id))
                 .fetchOneInto(Doctor.class);
     }
-    public Doctor createDoctor(Doctor doctor){
-        return dsl.insertInto(DOCTOR)
+    public void createDoctor(Doctor doctor){
+         dsl.insertInto(DOCTOR)
                 .set(dsl.newRecord(DOCTOR,doctor))
                 .returning()
                 .fetchOne()
                 .into(Doctor.class);
     }
-    public void deleteDoctorById(Integer id){
-        dsl.deleteFrom(DOCTOR)
+    public int deleteDoctorById(Integer id){
+        return dsl.deleteFrom(DOCTOR)
                 .where(DOCTOR.ID.eq(id))
                 .execute();
     }

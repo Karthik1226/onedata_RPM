@@ -4,9 +4,11 @@
 package com.onedata.remotepatientmonitoring.models;
 
 
+import com.onedata.remotepatientmonitoring.models.tables.Device;
 import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
+import com.onedata.remotepatientmonitoring.models.tables.Reading;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,11 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
+     * The table <code>public.device</code>.
+     */
+    public final Device DEVICE = Device.DEVICE;
+
+    /**
      * The table <code>public.doctor</code>.
      */
     public final Doctor DOCTOR = Doctor.DOCTOR;
@@ -43,6 +50,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.patient</code>.
      */
     public final Patient PATIENT = Patient.PATIENT;
+
+    /**
+     * The table <code>public.reading</code>.
+     */
+    public final Reading READING = Reading.READING;
 
     /**
      * No further instances allowed
@@ -60,9 +72,11 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            Device.DEVICE,
             Doctor.DOCTOR,
             DoctorPatient.DOCTOR_PATIENT,
-            Patient.PATIENT
+            Patient.PATIENT,
+            Reading.READING
         );
     }
 }

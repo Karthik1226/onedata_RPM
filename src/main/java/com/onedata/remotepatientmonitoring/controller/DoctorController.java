@@ -1,7 +1,10 @@
 package com.onedata.remotepatientmonitoring.controller;
 
+import com.onedata.remotepatientmonitoring.dto.doctor.DoctorRequestDTO;
+import com.onedata.remotepatientmonitoring.dto.doctor.DoctorResponseDTO;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Doctor;
 import com.onedata.remotepatientmonitoring.service.DoctorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,23 +17,27 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping
-    public List<Doctor> findAllDoctors(){
+    public List<DoctorResponseDTO> findAllDoctors(){
         return doctorService.findAll();
     }
+
     @GetMapping("id/{id}")
-    public Doctor findDoctorsById(@PathVariable("id") Integer id){
+    public DoctorResponseDTO findDoctorsById(@PathVariable("id") Integer id){
         return doctorService.findById(id);
     }
+
     @PostMapping
-    public Doctor createDoctor(@RequestBody Doctor doctor){
-        return doctorService.create(doctor);
+    public String createDoctor(@RequestBody @Valid DoctorResponseDTO responseDTO){
+        return doctorService.create(responseDTO);
     }
+
     @DeleteMapping("/delete/{id}")
-    public void deleteDoctor(@PathVariable("id") Integer id){
-        doctorService.delete(id);
+    public String deleteDoctor(@PathVariable("id") Integer id){
+        return doctorService.delete(id);
     }
+
     @PutMapping("/{id}")
-    public Doctor updateDoctors(@RequestBody Doctor doctor, @PathVariable("id") Integer id){
+    public DoctorResponseDTO updateDoctors(@RequestBody @Valid DoctorRequestDTO doctor, @PathVariable("id") Integer id){
         return doctorService.update(doctor,id);
     }
 }

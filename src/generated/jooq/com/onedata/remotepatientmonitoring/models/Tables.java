@@ -4,9 +4,11 @@
 package com.onedata.remotepatientmonitoring.models;
 
 
+import com.onedata.remotepatientmonitoring.models.tables.Device;
 import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
+import com.onedata.remotepatientmonitoring.models.tables.Reading;
 
 
 /**
@@ -14,6 +16,11 @@ import com.onedata.remotepatientmonitoring.models.tables.Patient;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>public.device</code>.
+     */
+    public static final Device DEVICE = Device.DEVICE;
 
     /**
      * The table <code>public.doctor</code>.
@@ -29,4 +36,9 @@ public class Tables {
      * The table <code>public.patient</code>.
      */
     public static final Patient PATIENT = Patient.PATIENT;
+
+    /**
+     * The table <code>public.reading</code>.
+     */
+    public static final Reading READING = Reading.READING;
 }

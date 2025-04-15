@@ -6,6 +6,7 @@ package com.onedata.remotepatientmonitoring.models.tables;
 
 import com.onedata.remotepatientmonitoring.models.Keys;
 import com.onedata.remotepatientmonitoring.models.Public;
+import com.onedata.remotepatientmonitoring.models.tables.Device.DevicePath;
 import com.onedata.remotepatientmonitoring.models.tables.Doctor.DoctorPath;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient.DoctorPatientPath;
 import com.onedata.remotepatientmonitoring.models.tables.records.PatientRecord;
@@ -151,6 +152,19 @@ public class Patient extends TableImpl<PatientRecord> {
     @Override
     public UniqueKey<PatientRecord> getPrimaryKey() {
         return Keys.PATIENT_PKEY;
+    }
+
+    private transient DevicePath _device;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.device</code>
+     * table
+     */
+    public DevicePath device() {
+        if (_device == null)
+            _device = new DevicePath(this, null, Keys.DEVICE__DEVICE_ASSIGNED_PATIENT_ID_FKEY.getInverseKey());
+
+        return _device;
     }
 
     private transient DoctorPatientPath _doctorPatient;

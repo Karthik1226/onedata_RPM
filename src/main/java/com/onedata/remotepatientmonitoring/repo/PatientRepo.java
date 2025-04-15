@@ -24,24 +24,24 @@ public class PatientRepo {
                 .where(PATIENT.ID.eq(id))
                 .fetchOneInto(Patient.class);
     }
-    public Patient createPatients(Patient patient){
-        return dsl.insertInto(PATIENT)
+    public void createPatients(Patient patient){
+         dsl.insertInto(PATIENT)
                 .set(dsl.newRecord(PATIENT,patient))
                 .returning()
                 .fetchOne()
                 .into(Patient.class);
     }
-    public void deletePatientById(Integer id){
-        dsl.deleteFrom(PATIENT)
+    public int deletePatientById(Integer id){
+        return dsl.deleteFrom(PATIENT)
                 .where(PATIENT.ID.eq(id))
                 .execute();
     }
-    public Patient updatePatients(Patient patient, Integer id){
-        return dsl.update(PATIENT)
+    public void updatePatients(Patient patient){
+         dsl.update(PATIENT)
                 .set(PATIENT.NAME, patient.getName())
                 .set(PATIENT.AGE,patient.getAge())
                 .set(PATIENT.GENDER,patient.getGender())
-                .where(PATIENT.ID.eq(id))
+                .where(PATIENT.ID.eq(patient.getId()))
                 .returning()
                 .fetchOne()
                 .into(Patient.class);

@@ -4,12 +4,16 @@
 package com.onedata.remotepatientmonitoring.models;
 
 
+import com.onedata.remotepatientmonitoring.models.tables.Device;
 import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
+import com.onedata.remotepatientmonitoring.models.tables.Reading;
+import com.onedata.remotepatientmonitoring.models.tables.records.DeviceRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.DoctorPatientRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.DoctorRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.PatientRecord;
+import com.onedata.remotepatientmonitoring.models.tables.records.ReadingRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -29,14 +33,20 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<DeviceRecord> DEVICE_ASSIGNED_PATIENT_ID_KEY = Internal.createUniqueKey(Device.DEVICE, DSL.name("device_assigned_patient_id_key"), new TableField[] { Device.DEVICE.ASSIGNED_PATIENT_ID }, true);
+    public static final UniqueKey<DeviceRecord> DEVICE_PKEY = Internal.createUniqueKey(Device.DEVICE, DSL.name("device_pkey"), new TableField[] { Device.DEVICE.ID }, true);
+    public static final UniqueKey<DeviceRecord> DEVICE_SERIAL_NUMBER_KEY = Internal.createUniqueKey(Device.DEVICE, DSL.name("device_serial_number_key"), new TableField[] { Device.DEVICE.SERIAL_NUMBER }, true);
     public static final UniqueKey<DoctorRecord> DOCTOR_PKEY = Internal.createUniqueKey(Doctor.DOCTOR, DSL.name("doctor_pkey"), new TableField[] { Doctor.DOCTOR.ID }, true);
     public static final UniqueKey<DoctorPatientRecord> DOCTOR_PATIENT_PKEY = Internal.createUniqueKey(DoctorPatient.DOCTOR_PATIENT, DSL.name("doctor_patient_pkey"), new TableField[] { DoctorPatient.DOCTOR_PATIENT.DOCTOR_ID, DoctorPatient.DOCTOR_PATIENT.PATIENT_ID }, true);
     public static final UniqueKey<PatientRecord> PATIENT_PKEY = Internal.createUniqueKey(Patient.PATIENT, DSL.name("patient_pkey"), new TableField[] { Patient.PATIENT.ID }, true);
+    public static final UniqueKey<ReadingRecord> READING_PKEY = Internal.createUniqueKey(Reading.READING, DSL.name("reading_pkey"), new TableField[] { Reading.READING.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<DeviceRecord, PatientRecord> DEVICE__DEVICE_ASSIGNED_PATIENT_ID_FKEY = Internal.createForeignKey(Device.DEVICE, DSL.name("device_assigned_patient_id_fkey"), new TableField[] { Device.DEVICE.ASSIGNED_PATIENT_ID }, Keys.PATIENT_PKEY, new TableField[] { Patient.PATIENT.ID }, true);
     public static final ForeignKey<DoctorPatientRecord, DoctorRecord> DOCTOR_PATIENT__DOCTOR_PATIENT_DOCTOR_ID_FKEY = Internal.createForeignKey(DoctorPatient.DOCTOR_PATIENT, DSL.name("doctor_patient_doctor_id_fkey"), new TableField[] { DoctorPatient.DOCTOR_PATIENT.DOCTOR_ID }, Keys.DOCTOR_PKEY, new TableField[] { Doctor.DOCTOR.ID }, true);
     public static final ForeignKey<DoctorPatientRecord, PatientRecord> DOCTOR_PATIENT__DOCTOR_PATIENT_PATIENT_ID_FKEY = Internal.createForeignKey(DoctorPatient.DOCTOR_PATIENT, DSL.name("doctor_patient_patient_id_fkey"), new TableField[] { DoctorPatient.DOCTOR_PATIENT.PATIENT_ID }, Keys.PATIENT_PKEY, new TableField[] { Patient.PATIENT.ID }, true);
+    public static final ForeignKey<ReadingRecord, DeviceRecord> READING__READING_DEVICE_ID_FKEY = Internal.createForeignKey(Reading.READING, DSL.name("reading_device_id_fkey"), new TableField[] { Reading.READING.DEVICE_ID }, Keys.DEVICE_PKEY, new TableField[] { Device.DEVICE.ID }, true);
 }
