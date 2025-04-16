@@ -44,7 +44,7 @@ public class DoctorService {
         if(rowAffected == 0){
             throw new ResourceNotFoundException("Doctor with Id" + id + "not found");
         }
-        return " Doctor Details deleted succuessfully";
+        return " Doctor Details deleted successfully";
 
     }
     public DoctorResponseDTO update(DoctorRequestDTO requestDTO, Integer id){

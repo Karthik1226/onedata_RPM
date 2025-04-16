@@ -36,9 +36,17 @@ public class DoctorPatientService {
         doctorPatientRepo.removeDoctorFromPatient(doctorId,patientId);
     }
     public List<Doctor> getDoctorByPatient(Integer patientId){
-        return doctorPatientRepo.getDoctorsByPatientId(patientId);
+        List<Doctor> doctors = doctorPatientRepo.getDoctorsByPatientId(patientId);
+        if(patientId == null){
+            throw new ResourceNotFoundException("Patient With Id "+ patientId + " Is not found");
+        }
+        return doctors;
     }
     public List<Patient> getPatientByDoctor(Integer doctorId){
-        return doctorPatientRepo.getPatientsByDoctorId(doctorId);
+        List<Patient> patient = doctorPatientRepo.getPatientsByDoctorId(doctorId);
+        if(doctorId == null){
+            throw new ResourceNotFoundException("Doctor With Id "+ doctorId + " Is not found");
+        }
+        return patient;
     }
 }
