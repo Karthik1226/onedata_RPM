@@ -1,9 +1,12 @@
 package com.onedata.remotepatientmonitoring.controller;
 
 import com.onedata.remotepatientmonitoring.dto.device.DeviceAssign;
+import com.onedata.remotepatientmonitoring.exception.ResourceNotFoundException;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Device;
 import com.onedata.remotepatientmonitoring.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,19 +19,28 @@ public class DeviceController {
     private DeviceService deviceService;
 
     @PostMapping
-    public String assignDeviceToPatient(@RequestBody DeviceAssign deviceAssign){
-        return deviceService.assignDevice(deviceAssign.getSerialNumber(), deviceAssign.getPatientId());
+    public ResponseEntity<String> assignDeviceToPatient(@RequestBody DeviceAssign deviceAssign){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(deviceService.assignDevice(deviceAssign.getSerialNumber(), deviceAssign.getPatientId()));
     }
+
     @GetMapping
-    public List<Device> findAllDoctors(){
-        return deviceService.getAll();
+    public ResponseEntity<List<Device>> findAllDevice(){
+        return ResponseEntity.ok(deviceService.getAll());
     }
+
     @GetMapping("/{deviceId}")
-    public Device getDetails(@PathVariable("deviceId") Integer deviceId){
-        return deviceService.getDetailsByDeviceId(deviceId);
+    public ResponseEntity<Device> getDetails(@PathVariable("deviceId") Integer deviceId){
+        Device device = deviceService.getDetailsByDeviceId(deviceId);
+
+        if(device != null){
+            return ResponseEntity.ok(device);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
     @DeleteMapping("/{patientId}")
-    public String unAssignDevice(@PathVariable("patientId") Integer patientId){
-        return deviceService.removeDevice(patientId);
+    public ResponseEntity<String> unAssignDevice(@PathVariable("patientId") Integer patientId){
+        return ResponseEntity.ok(deviceService.removeDevice(patientId));
     }
 }
