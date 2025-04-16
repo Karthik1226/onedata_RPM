@@ -6,6 +6,8 @@ import com.onedata.remotepatientmonitoring.models.tables.pojos.Doctor;
 import com.onedata.remotepatientmonitoring.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +19,29 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping
-    public List<DoctorResponseDTO> findAllDoctors(){
-        return doctorService.findAll();
+    public ResponseEntity<List<DoctorResponseDTO>> findAllDoctors(){
+        return ResponseEntity.ok(doctorService.findAll());
     }
 
     @GetMapping("id/{id}")
-    public DoctorResponseDTO findDoctorsById(@PathVariable("id") Integer id){
-        return doctorService.findById(id);
+    public ResponseEntity<DoctorResponseDTO> findDoctorsById(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(doctorService.findById(id));
     }
 
     @PostMapping
-    public String createDoctor(@RequestBody @Valid DoctorResponseDTO responseDTO){
-        return doctorService.create(responseDTO);
+    public ResponseEntity<String> createDoctor(@RequestBody @Valid DoctorResponseDTO responseDTO){
+        String message = doctorService.create(responseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(message);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteDoctor(@PathVariable("id") Integer id){
-        return doctorService.delete(id);
+    public ResponseEntity<String> deleteDoctor(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(doctorService.delete(id));
     }
 
     @PutMapping("/{id}")
-    public DoctorResponseDTO updateDoctors(@RequestBody @Valid DoctorRequestDTO doctor, @PathVariable("id") Integer id){
-        return doctorService.update(doctor,id);
+    public ResponseEntity<DoctorResponseDTO> updateDoctors(@RequestBody @Valid DoctorRequestDTO doctor, @PathVariable("id") Integer id){
+        return ResponseEntity.ok(doctorService.update(doctor, id));
     }
 }
