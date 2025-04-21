@@ -3,6 +3,8 @@ package com.onedata.remotepatientmonitoring.repo;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Device;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import static com.onedata.remotepatientmonitoring.models.Tables.DEVICE;
 public class DeviceRepo {
     @Autowired
     private DSLContext dsl;
+
 
     public String assignDeviceToPatient(String serialNumber,Integer patientId){
          dsl.insertInto(DEVICE)
@@ -36,5 +39,11 @@ public class DeviceRepo {
                 .where(DEVICE.ASSIGNED_PATIENT_ID.eq(patientId))
                 .execute();
         return "Device Unassigned Successfully";
+    }
+
+    public Device findByPatientId(Integer patientId) {
+        return dsl.selectFrom(DEVICE)
+                .where(DEVICE.ASSIGNED_PATIENT_ID.eq(patientId))
+                .fetchOneInto(Device.class);
     }
 }

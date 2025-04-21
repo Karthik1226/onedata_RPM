@@ -43,4 +43,12 @@ public class DeviceController {
     public ResponseEntity<String> unAssignDevice(@PathVariable("patientId") Integer patientId){
         return ResponseEntity.ok(deviceService.removeDevice(patientId));
     }
+    @GetMapping("/assigned/{patientId}")
+    public ResponseEntity<Device> getAssignedDeviceByPatientId(@PathVariable("patientId") Integer patientId){
+        Device device = deviceService.getAssignedDevice(patientId);
+        if(device != null){
+            return ResponseEntity.ok(device);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

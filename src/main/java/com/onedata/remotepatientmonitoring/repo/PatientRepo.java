@@ -3,6 +3,8 @@ package com.onedata.remotepatientmonitoring.repo;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Patient;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +16,11 @@ public class PatientRepo {
 
     @Autowired
     private DSLContext dsl;
+
+    public String getCurrentUsername(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
 
     public List<Patient> findAllPatients(){
         return dsl.selectFrom(PATIENT)
