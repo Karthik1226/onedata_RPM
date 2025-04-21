@@ -7,6 +7,7 @@ import com.onedata.remotepatientmonitoring.repo.DoctorPatientRepo;
 import com.onedata.remotepatientmonitoring.repo.DoctorRepo;
 import com.onedata.remotepatientmonitoring.repo.PatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,23 +31,30 @@ public class DoctorPatientService {
         doctorPatientRepo.assignDoctorToPatient(doctorId,patientId);
         return "Doctor assigned to the patient";
     }
-
-
     public void removeDoctor(Integer doctorId,Integer patientId){
         doctorPatientRepo.removeDoctorFromPatient(doctorId,patientId);
     }
     public List<Doctor> getDoctorByPatient(Integer patientId){
-        List<Doctor> doctors = doctorPatientRepo.getDoctorsByPatientId(patientId);
-        if(patientId == null){
+        String currentUsername = patientRepo.getCurrentUsername();
+
+        Patient patient = patientRepo.findPatientsByID(patientId);
+        if(patient == null){
             throw new ResourceNotFoundException("Patient With Id "+ patientId + " Is not found");
         }
-        return doctors;
+        if(!patient.getName().equals(currentUsername)){
+            throw new AccessDeniedException("Access Denied. You are not authorized to view this patient's doctor details.");
+        }
+        return doctorPatientRepo.getDoctorsByPatientId(patientId);
     }
     public List<Patient> getPatientByDoctor(Integer doctorId){
-        List<Patient> patient = doctorPatientRepo.getPatientsByDoctorId(doctorId);
+        String currentUsername = doctorRepo.getCurrentUsername();
+        Doctor doctor = doctorRepo.findDoctorsByID(doctorId);
         if(doctorId == null){
             throw new ResourceNotFoundException("Doctor With Id "+ doctorId + " Is not found");
         }
-        return patient;
+        if (!doctor.getName().equals(currentUsername)){
+            throw new AccessDeniedException("Access Denied. You are not authorized to view this doctor's patient details.");
+        }
+        return doctorPatientRepo.getPatientsByDoctorId(doctorId);
     }
 }

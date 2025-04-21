@@ -9,11 +9,13 @@ import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
 import com.onedata.remotepatientmonitoring.models.tables.Reading;
+import com.onedata.remotepatientmonitoring.models.tables.Users;
 import com.onedata.remotepatientmonitoring.models.tables.records.DeviceRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.DoctorPatientRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.DoctorRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.PatientRecord;
 import com.onedata.remotepatientmonitoring.models.tables.records.ReadingRecord;
+import com.onedata.remotepatientmonitoring.models.tables.records.UsersRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -40,6 +42,8 @@ public class Keys {
     public static final UniqueKey<DoctorPatientRecord> DOCTOR_PATIENT_PKEY = Internal.createUniqueKey(DoctorPatient.DOCTOR_PATIENT, DSL.name("doctor_patient_pkey"), new TableField[] { DoctorPatient.DOCTOR_PATIENT.DOCTOR_ID, DoctorPatient.DOCTOR_PATIENT.PATIENT_ID }, true);
     public static final UniqueKey<PatientRecord> PATIENT_PKEY = Internal.createUniqueKey(Patient.PATIENT, DSL.name("patient_pkey"), new TableField[] { Patient.PATIENT.ID }, true);
     public static final UniqueKey<ReadingRecord> READING_PKEY = Internal.createUniqueKey(Reading.READING, DSL.name("reading_pkey"), new TableField[] { Reading.READING.ID }, true);
+    public static final UniqueKey<UsersRecord> USERS_PKEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_pkey"), new TableField[] { Users.USERS.ID }, true);
+    public static final UniqueKey<UsersRecord> USERS_USERNAME_KEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_username_key"), new TableField[] { Users.USERS.USERNAME }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions

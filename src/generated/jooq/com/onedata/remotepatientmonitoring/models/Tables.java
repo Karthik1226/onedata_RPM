@@ -9,6 +9,7 @@ import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
 import com.onedata.remotepatientmonitoring.models.tables.Reading;
+import com.onedata.remotepatientmonitoring.models.tables.Users;
 
 
 /**
@@ -41,4 +42,9 @@ public class Tables {
      * The table <code>public.reading</code>.
      */
     public static final Reading READING = Reading.READING;
+
+    /**
+     * The table <code>public.users</code>.
+     */
+    public static final Users USERS = Users.USERS;
 }
