@@ -29,8 +29,8 @@ public class DoctorController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createDoctor(@RequestBody @Valid DoctorResponseDTO responseDTO){
-        String message = doctorService.create(responseDTO);
+    public ResponseEntity<String> createDoctor(@RequestBody @Valid DoctorRequestDTO requestDTO){
+        String message = doctorService.create(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(message);
     }

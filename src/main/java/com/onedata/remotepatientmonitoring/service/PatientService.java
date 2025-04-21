@@ -6,6 +6,9 @@ import com.onedata.remotepatientmonitoring.exception.ResourceNotFoundException;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Patient;
 import com.onedata.remotepatientmonitoring.repo.PatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +19,12 @@ public class PatientService {
     @Autowired
     private PatientRepo patientRepo;
 
+    public String getCurrentUsername(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
+
     public List<PatientResponseDTO> findAll(){
          return patientRepo.findAllPatients()
                  .stream()
@@ -23,10 +32,14 @@ public class PatientService {
                  .toList();
     }
     public PatientResponseDTO findById(Integer id) {
+        String username = getCurrentUsername();
+
         Patient patient = patientRepo.findPatientsByID(id);
         if(patient == null){
             throw new ResourceNotFoundException("Patient with Id " + id + " not found.");
         }
+        if(!patient.getName().equals(username))
+            throw new AccessDeniedException("Access Denied. You are not authorized to view this patient's details.");
         return mapToResponseDTO(patient);
     }
     public String create(PatientResquestDTO resquestDTO){

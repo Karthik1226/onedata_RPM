@@ -6,6 +6,9 @@ import com.onedata.remotepatientmonitoring.exception.ResourceNotFoundException;
 import com.onedata.remotepatientmonitoring.models.tables.pojos.Doctor;
 import com.onedata.remotepatientmonitoring.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -17,23 +20,33 @@ public class DoctorService {
    @Autowired
    private DoctorRepo doctorRepo;
 
+    public String getCurrentUsername(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
     public List<DoctorResponseDTO> findAll(){
          return doctorRepo.findAllDoctors()
                  .stream()
                  .map(this::asDoctor)
                  .toList();
     }
+
     public DoctorResponseDTO findById(Integer id){
+        String username = getCurrentUsername();
+
          Doctor doctor = doctorRepo.findDoctorsByID(id);
          if(doctor == null){
              throw new ResourceNotFoundException("Doctor With Id " + id + " Is not found");
          }
+        if(!doctor.getName().equals(username))
+            throw new AccessDeniedException("Access Denied. You are not authorized to view this doctor's details.");
          return asDoctor(doctor);
     }
-    public String create(DoctorResponseDTO responseDTO){
+    public String create(DoctorRequestDTO requestDTO){
         Doctor doctor1 = new Doctor();
-        doctor1.setName(responseDTO.getName());
-        doctor1.setSpecialization(responseDTO.getSpecialization());
+        doctor1.setName(requestDTO.getName());
+        doctor1.setSpecialization(requestDTO.getSpecialization());
         doctorRepo.createDoctor(doctor1);
 
         return "Doctor Added Successfully";

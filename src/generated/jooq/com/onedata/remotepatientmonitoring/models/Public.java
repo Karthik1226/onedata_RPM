@@ -9,6 +9,7 @@ import com.onedata.remotepatientmonitoring.models.tables.Doctor;
 import com.onedata.remotepatientmonitoring.models.tables.DoctorPatient;
 import com.onedata.remotepatientmonitoring.models.tables.Patient;
 import com.onedata.remotepatientmonitoring.models.tables.Reading;
+import com.onedata.remotepatientmonitoring.models.tables.Users;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,6 +58,11 @@ public class Public extends SchemaImpl {
     public final Reading READING = Reading.READING;
 
     /**
+     * The table <code>public.users</code>.
+     */
+    public final Users USERS = Users.USERS;
+
+    /**
      * No further instances allowed
      */
     private Public() {
@@ -76,7 +82,8 @@ public class Public extends SchemaImpl {
             Doctor.DOCTOR,
             DoctorPatient.DOCTOR_PATIENT,
             Patient.PATIENT,
-            Reading.READING
+            Reading.READING,
+            Users.USERS
         );
     }
 }
